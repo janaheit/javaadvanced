@@ -20,14 +20,14 @@ public class FileCompanyRepository implements CompanyRepository {
 
 	private FileCompanyRepository(){
 		try {
-			List<String> compStrings = Files.readAllLines(Paths.get("c:\\temp\\javacourses\\companies.txt"));
+			List<String> compStrings = Files.readAllLines(Paths.get("/temp/javacourses/companies.txt"));
 			for(String s:compStrings){
 				companies.add(new Company(s.trim()));
 			}
 			companies.trimToSize();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -49,7 +49,7 @@ public class FileCompanyRepository implements CompanyRepository {
 		    }
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
