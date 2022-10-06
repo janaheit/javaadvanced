@@ -35,6 +35,7 @@ public class FilePersonRepository implements PersonRepository {
 		}
 
 		// creating Persons by hand for now
+		/*
 		Person p1 = new Person("Jana","Heitkemper", LocalDate.of(1998, 01, 06),
 				"janaheitkemper@gmail.com","pqsszord", new Company("Smals"));
 		Person p2 = new Person("Anna","Müller");
@@ -48,7 +49,7 @@ public class FilePersonRepository implements PersonRepository {
 		persons.add(p3);
 		persons.add(p4);
 		persons.add(p5);
-		persons.add(p6);
+		persons.add(p6);*/
 	}
 
 	private Person createPerson(String personLine){
@@ -64,38 +65,31 @@ public class FilePersonRepository implements PersonRepository {
 		p.setPersonNumber(Integer.parseInt(number));
 
 		// parse optional fields
-		if (elements[3] != null) {
+		if (!elements[3].equals("null")) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			p.setBirthDate(LocalDate.parse(elements[3], formatter));
 		}
 
-		if (elements[4] != null) {
+		if (!elements[4].equals("null")) {
 			p.setEmail(elements[4]);
 		}
 
-		if (elements[5] != null) {
+		if (!elements[5].equals("null")) {
 			p.setPassword(elements[5]);
 		}
 
 		Company c;
-		if (elements[6] != null) {
+		if (!elements[6].equals( "null")) {
 			c = new Company(elements[6]);
 			p.setCompany(c);
 
-			if (elements[7] != null) {
+			if (!elements[7].equals("null")) {
 				Address a = new Address(elements[7], elements[8], elements[9], elements[10], elements[11], elements[12]);
 				c.setAddress(a);
 			}
 		}
 
 		return p;
-	}
-
-	private Company createCompany(String companyName){
-
-	}
-	private Address createAddress(){
-
 	}
 
 	@Override
@@ -148,17 +142,17 @@ public class FilePersonRepository implements PersonRepository {
 		if (p.getBirthDate() != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			personLine.append(p.getBirthDate().format(formatter));
-		}
+		} else personLine.append("null");
 		personLine.append(";");
 
 		if (p.getEmail() != null) {
 			personLine.append(p.getEmail());
-		}
+		} else personLine.append("null");
 		personLine.append(";");
 
 		if (p.getPassword() != null){
 			personLine.append(p.getPassword());
-		}
+		} else personLine.append("null");
 		personLine.append(";");
 
 		if (p.getCompany() != null) {
@@ -184,23 +178,24 @@ public class FilePersonRepository implements PersonRepository {
 				personLine.append(p.getCompany().getAddress().getCountryCode());
 				personLine.append(";");
 			} else {
-				personLine.append(";");
-				personLine.append(";");
-				personLine.append(";");
-				personLine.append(";");
-				personLine.append(";");
-				personLine.append(";");
+				personLine.append("null;");
+				personLine.append("null;");
+				personLine.append("null;");
+				personLine.append("null;");
+				personLine.append("null;");
+				personLine.append("null;");
 			}
 		} else {
-			personLine.append(";");
-			personLine.append(";");
-			personLine.append(";");
-			personLine.append(";");
-			personLine.append(";");
-			personLine.append(";");
-			personLine.append(";");
+			personLine.append("null;");
+			personLine.append("null;");
+			personLine.append("null;");
+			personLine.append("null;");
+			personLine.append("null;");
+			personLine.append("null;");
+			personLine.append("null;");
 
 		}
+		System.out.println(personLine);
 		return personLine;
 	}
 

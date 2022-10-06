@@ -3,8 +3,11 @@ package be.abis.exercise.model;
 
 import be.abis.exercise.exception.InvoiceException;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class PublicSession extends Session {
@@ -70,8 +73,45 @@ public class PublicSession extends Session {
 	public Iterator<CourseParticipant> getEnrolmentsIterator(){
 		return enrolments.iterator();
 	}
-	
-	
 
-	
+	public void printListOfParticipants() {
+		StringBuilder filename = new StringBuilder("/temp/javacourses/participants-");
+		filename.append(getCourse().getTitle());
+		filename.append(".txt");
+
+
+		try (PrintWriter pw = new PrintWriter(filename.toString())) {
+
+			pw.printf("%s\n",getCourse().getTitle());
+			pw.printf("------------------------------------------------------\n");
+			pw.printf("%-15s%s\n", "Instructor:", getInstructor().getName());
+
+			if (getLocation().getAddress() == null){
+				pw.printf("%-15s%s\n", "Location:", getLocation().getName());
+			} else {
+				pw.printf("%-15s%s, %s %s, %s %s\n", "Location:", getLocation().getName(),getLocation().getAddress().getStreet(),
+						getLocation().getAddress().getNr(), getLocation().getAddress().getZipCode(),
+						getLocation().getAddress().getTown());
+			}
+
+			pw.printf("------------------------------------------------------\n");
+
+			// enrolments.sort(Comparator.comparing(e -> ((Person) e).getCompany().getName()));
+			// enrolments.sort((e1, e2)-> (((Person)e1).getCompany().getName().compareTo(((Person)e2).getCompany().getName())) );
+			for (CourseParticipant p : enrolments) {
+				Person person = (Person) p;
+				if (person.getCompany() == null) {
+					pw.printf("%-30s%s %S\n", person.getPersonNumber(), person.getFirstName(), person.getLastName());
+				} else {
+					pw.printf("%-15s%-15s%s %S\n", person.getPersonNumber(), person.getCompany().getName(),
+							person.getFirstName(), person.getLastName());
+				}
+			}
+
+			pw.printf("------------------------------------------------------\n");
+
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 }

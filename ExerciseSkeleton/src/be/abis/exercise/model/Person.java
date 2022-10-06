@@ -113,6 +113,11 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		System.out.println(this + " teaches " + course.getTitle());
 	}
 
+	@Override
+	public String getName() {
+		return firstName + " " + lastName;
+	}
+
 	public void attendCourse(Course course) {
 		System.out.println(this + " follows " + course.getTitle());
 	}
