@@ -76,8 +76,6 @@ public class FilePersonRepository implements PersonRepository {
 	private StringBuilder writePersonLine(Person p){
 		StringBuilder personLine = new StringBuilder();
 
-		// TODO write to csv file (semicolon tho)
-
 		// data that every person has
 		personLine.append(p.getPersonNumber());
 		personLine.append(";");
