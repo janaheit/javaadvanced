@@ -11,13 +11,21 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class PublicSession extends Session {
-	
+
+	private static int COUNT=0;
 	public final static Company ABIS = new Company("Abis");
 	private ArrayList<CourseParticipant> enrolments = new ArrayList<CourseParticipant>();
+	private int sessionNr;
 
 	public PublicSession(Course course, LocalDate date, Company location,
 			Instructor instructor) {
 		super(course, date, location, instructor);
+		COUNT++;
+		this.sessionNr = COUNT;
+	}
+
+	public int getSessionNr() {
+		return sessionNr;
 	}
 
 	@Override
@@ -76,7 +84,7 @@ public class PublicSession extends Session {
 
 	public void printListOfParticipants() {
 		StringBuilder filename = new StringBuilder("/temp/javacourses/participants-");
-		filename.append(getCourse().getTitle());
+		filename.append(sessionNr);
 		filename.append(".txt");
 
 
@@ -98,12 +106,12 @@ public class PublicSession extends Session {
 
 			// enrolments.sort(Comparator.comparing(e -> ((Person) e).getCompany().getName()));
 			// enrolments.sort((e1, e2)-> (((Person)e1).getCompany().getName().compareTo(((Person)e2).getCompany().getName())) );
-			for (CourseParticipant p : enrolments) {
-				Person person = (Person) p;
+			for (int x=0; x< enrolments.size();x++) {
+				Person person = (Person) enrolments.get(x);
 				if (person.getCompany() == null) {
-					pw.printf("%-30s%s %S\n", person.getPersonNumber(), person.getFirstName(), person.getLastName());
+					pw.printf("%-30s%s %S\n", x+1, person.getFirstName(), person.getLastName());
 				} else {
-					pw.printf("%-15s%-15s%s %S\n", person.getPersonNumber(), person.getCompany().getName(),
+					pw.printf("%-15s%-15s%s %S\n", x+1, person.getCompany().getName(),
 							person.getFirstName(), person.getLastName());
 				}
 			}
