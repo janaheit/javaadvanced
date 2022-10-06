@@ -104,6 +104,7 @@ public class PublicSession extends Session {
 
 			pw.printf("------------------------------------------------------\n");
 
+			// TODO make the sorting work! either put companies or work on a sorting that works anyway
 			// enrolments.sort(Comparator.comparing(e -> ((Person) e).getCompany().getName()));
 			// enrolments.sort((e1, e2)-> (((Person)e1).getCompany().getName().compareTo(((Person)e2).getCompany().getName())) );
 			for (int x=0; x< enrolments.size();x++) {
