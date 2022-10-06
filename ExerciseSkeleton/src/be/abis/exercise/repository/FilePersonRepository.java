@@ -1,5 +1,6 @@
 package be.abis.exercise.repository;
 
+import be.abis.exercise.model.Address;
 import be.abis.exercise.model.Company;
 import be.abis.exercise.model.Person;
 
@@ -25,7 +26,7 @@ public class FilePersonRepository implements PersonRepository {
 		try {
 			List<String> personStrings = Files.readAllLines(Paths.get("/temp/javacourses/persons.txt"));
 			for(String s:personStrings){
-				// create Person
+				persons.add(createPerson(s));
 			}
 			persons.trimToSize();
 		} catch (IOException e) {
@@ -48,6 +49,53 @@ public class FilePersonRepository implements PersonRepository {
 		persons.add(p4);
 		persons.add(p5);
 		persons.add(p6);
+	}
+
+	private Person createPerson(String personLine){
+		String[] elements = personLine.split(";");
+
+		// parse mandatory fields
+		String number = elements[0];
+		String firstName = elements[1];
+		String lastName = elements[2];
+
+		// create base person
+		Person p = new Person(firstName, lastName);
+		p.setPersonNumber(Integer.parseInt(number));
+
+		// parse optional fields
+		if (elements[3] != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			p.setBirthDate(LocalDate.parse(elements[3], formatter));
+		}
+
+		if (elements[4] != null) {
+			p.setEmail(elements[4]);
+		}
+
+		if (elements[5] != null) {
+			p.setPassword(elements[5]);
+		}
+
+		Company c;
+		if (elements[6] != null) {
+			c = new Company(elements[6]);
+			p.setCompany(c);
+
+			if (elements[7] != null) {
+				Address a = new Address(elements[7], elements[8], elements[9], elements[10], elements[11], elements[12]);
+				c.setAddress(a);
+			}
+		}
+
+		return p;
+	}
+
+	private Company createCompany(String companyName){
+
+	}
+	private Address createAddress(){
+
 	}
 
 	@Override
