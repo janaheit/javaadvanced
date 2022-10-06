@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AddressTest {
 
-
     @BeforeEach
     void setUp() {
     }
@@ -21,10 +20,17 @@ class AddressTest {
 
         assertDoesNotThrow(address::checkZipCode);
     }
+    @Test
+    void checkCorrectNLWithSpace() {
+        Address address = new Address("Kanaalstraat", "85", "8933 DB",
+                "Leeuwarden", "Netherlands", "NL");
+
+        assertDoesNotThrow(address::checkZipCode);
+    }
 
     @Test
     void checkWrongNLThrows() {
-        Address address = new Address("Kanaalstraat", "85", "8933 DB",
+        Address address = new Address("Kanaalstraat", "85", "8933 D5B",
                 "Leeuwarden", "Netherlands", "NL");
 
         assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
@@ -39,9 +45,17 @@ class AddressTest {
     }
 
 
-        @Test
+    @Test
     void checkWrongBEThrows() {
         Address address = new Address("Kanaalstraat", "85", "8933 DB",
+                "Leeuwarden", "België", "BE");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
+    void checkWrongBEWith0Throws() {
+        Address address = new Address("Kanaalstraat", "85", "0933",
                 "Leeuwarden", "België", "BE");
 
         assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);

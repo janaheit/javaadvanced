@@ -21,6 +21,18 @@ public class FilePersonRepository implements PersonRepository {
 	private ArrayList<Person> persons = new ArrayList<Person>();
 
 	private FilePersonRepository(){
+
+		try {
+			List<String> personStrings = Files.readAllLines(Paths.get("/temp/javacourses/persons.txt"));
+			for(String s:personStrings){
+				// create Person
+			}
+			persons.trimToSize();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+
 		// creating Persons by hand for now
 		Person p1 = new Person("Jana","Heitkemper", LocalDate.of(1998, 01, 06),
 				"janaheitkemper@gmail.com","pqsszord", new Company("Smals"));

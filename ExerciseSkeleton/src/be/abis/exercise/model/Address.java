@@ -32,12 +32,12 @@ public class Address {
 	public void checkZipCode() throws ZipCodeNotCorrectException {
 
 		if (countryCode.equals("BE")){
-			String regexBE = "\\d{4}";
+			String regexBE = "[1-9]\\d{3}";
 			Pattern p = Pattern.compile(regexBE);
 			Matcher m = p.matcher(zipCode);
 			if (!m.matches()) throw new ZipCodeNotCorrectException("Zip code is not correct for Belgium");
 		} else if (countryCode.equals("NL")){
-			String regexNL = "\\d{4}[A-Z]{2}";
+			String regexNL = "[1-9]\\d{3}\\s?[A-Z]{2}";
 			Pattern p = Pattern.compile(regexNL);
 			Matcher m = p.matcher(zipCode);
 			if (!m.matches()) throw new ZipCodeNotCorrectException("Zip code is not correct for the Netherlands");
