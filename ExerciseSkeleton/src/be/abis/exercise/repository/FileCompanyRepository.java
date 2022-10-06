@@ -1,5 +1,6 @@
 package be.abis.exercise.repository;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,10 +13,12 @@ import java.util.List;
 import be.abis.exercise.model.Company;
 
 public class FileCompanyRepository implements CompanyRepository {
+
+	private static FileCompanyRepository fileCompanyRepository;
 	
 	private ArrayList<Company> companies = new ArrayList<Company>();
 
-	public FileCompanyRepository(){
+	private FileCompanyRepository(){
 		try {
 			List<String> compStrings = Files.readAllLines(Paths.get("c:\\temp\\javacourses\\companies.txt"));
 			for(String s:compStrings){
@@ -48,6 +51,11 @@ public class FileCompanyRepository implements CompanyRepository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
+
+	public static FileCompanyRepository getInstance() {
+		if (fileCompanyRepository == null) fileCompanyRepository= new FileCompanyRepository();
+		return fileCompanyRepository;
+	}
 
 }

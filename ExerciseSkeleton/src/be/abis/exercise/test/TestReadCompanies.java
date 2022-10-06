@@ -14,7 +14,7 @@ public class TestReadCompanies {
 	@Test
 	void numberOfCompaniesInFileIs5(){
 		
-		CompanyRepository cr = new FileCompanyRepository();
+		CompanyRepository cr = FileCompanyRepository.getInstance();
 		List<Company> comps = cr.getCompanies();
 
 		assertEquals(5,comps.size());
