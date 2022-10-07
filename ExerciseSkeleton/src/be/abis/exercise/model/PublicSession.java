@@ -8,10 +8,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.*;
 
 public class PublicSession extends Session {
 
@@ -121,6 +118,8 @@ public class PublicSession extends Session {
 			// TODO make the sorting work! either put companies or work on a sorting that works anyway
 			// enrolments.sort(Comparator.comparing(e -> ((Person) e).getCompany().getName()));
 			// enrolments.sort((e1, e2)-> (((Person)e1).getCompany().getName().compareTo(((Person)e2).getCompany().getName())) );
+
+			// Collections.sort(this.enrolments, Comparator.comparing(p -> ((Person) p).getCompany().getName()).thenComparing(p -> ((Person) p).getLastName()));
 			for (int x=0; x< enrolments.size();x++) {
 				Person person = (Person) enrolments.get(x);
 				if (person.getCompany() == null) {
