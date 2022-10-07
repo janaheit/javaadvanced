@@ -1,7 +1,9 @@
 package be.abis.exercise.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Person implements Instructor, CourseParticipant, Comparable<CourseParticipant> {
 
@@ -15,29 +17,28 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 	private String password;
 	private Company company;
 
-	public Person(String firstName, String lastName) {
+	public Person(String firstName, String lastName, LocalDate birthDate) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		personNumber = ++counter;
+		this.birthDate = birthDate;
 	}
 
-	public Person(String firstName, String lastName, Company company) {
-		this(firstName, lastName);
+	public Person(String firstName, String lastName, LocalDate birthdate, Company company) {
+		this(firstName, lastName, birthdate);
 		this.company = company;
 	}
 	
 	public Person(String firstName, String lastName, LocalDate birthDate, String email,
 			String password, Company company) {
-		this(firstName,lastName,company);
-		this.birthDate = birthDate;
+		this(firstName,lastName,birthDate, company);
 		this.email = email;
 		this.password = password;
 	}
 
 	public Person(String firstName, String lastName, LocalDate birthDate, String email,
 			String password) {
-		this(firstName,lastName);
-		this.birthDate = birthDate;
+		this(firstName,lastName, birthDate);
 		this.email = email;
 		this.password = password;
 	}
@@ -106,8 +107,20 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 	public String toString() {
 		return this.firstName + " " + this.lastName;
 	}
-	
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Person person = (Person) o;
+		return personNumber == person.personNumber && firstName.equals(person.firstName)
+				&& lastName.equals(person.lastName) && Objects.equals(birthDate, person.birthDate);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(personNumber, firstName, lastName);
+	}
 
 	public void teach(Course course) {
 		System.out.println(this + " teaches " + course.getTitle());
@@ -116,6 +129,12 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 	@Override
 	public String getName() {
 		return firstName + " " + lastName;
+	}
+
+	public long calculateAge(){
+		LocalDate dateToday = LocalDate.now();
+
+		return ChronoUnit.YEARS.between(this.birthDate, dateToday);
 	}
 
 	public void attendCourse(Course course) {

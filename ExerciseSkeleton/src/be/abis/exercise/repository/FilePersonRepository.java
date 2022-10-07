@@ -60,15 +60,17 @@ public class FilePersonRepository implements PersonRepository {
 		String firstName = elements[1];
 		String lastName = elements[2];
 
-		// create base person
-		Person p = new Person(firstName, lastName);
-		p.setPersonNumber(Integer.parseInt(number));
-
-		// parse optional fields
-		if (!elements[3].equals("null")) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			p.setBirthDate(LocalDate.parse(elements[3], formatter));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate birthDate;
+		if (elements[3].equals("null")){
+			birthDate = LocalDate.now();
+		} else {
+			birthDate = LocalDate.parse(elements[3], formatter);
 		}
+
+		// create base person
+		Person p = new Person(firstName, lastName, birthDate);
+		p.setPersonNumber(Integer.parseInt(number));
 
 		if (!elements[4].equals("null")) {
 			p.setEmail(elements[4]);

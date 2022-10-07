@@ -110,9 +110,9 @@ public class PublicSession extends Session {
 			for (int x=0; x< enrolments.size();x++) {
 				Person person = (Person) enrolments.get(x);
 				if (person.getCompany() == null) {
-					pw.printf("%-30s%s %S\n", x+1, person.getFirstName(), person.getLastName());
+					pw.printf("%-30d%s %S\n", x+1, person.getFirstName(), person.getLastName());
 				} else {
-					pw.printf("%-15s%-15s%s %S\n", x+1, person.getCompany().getName(),
+					pw.printf("%-15d%-15s%s %S\n", x+1, person.getCompany().getName(),
 							person.getFirstName(), person.getLastName());
 				}
 			}
