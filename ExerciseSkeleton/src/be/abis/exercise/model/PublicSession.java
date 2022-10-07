@@ -5,10 +5,13 @@ import be.abis.exercise.exception.InvoiceException;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class PublicSession extends Session {
 
@@ -45,6 +48,17 @@ public class PublicSession extends Session {
 	public double invoice() throws InvoiceException {
 		System.out.println("Invoice in PublicSession");
 		return 500;
+	}
+
+	public double calculateRevenue(){
+		// revenue = (price * numParticipants) * 0.79 (VAT of 21%)
+
+		BigDecimal dailyPrice = new BigDecimal(String.valueOf(this.getCourse().getDailyPrice()));
+		BigDecimal numParticipants = new BigDecimal(String.valueOf(this.enrolments.size()));
+		BigDecimal vat = new BigDecimal("0.79");
+
+		BigDecimal revenue = dailyPrice.multiply(numParticipants).multiply(vat);
+		return revenue.doubleValue();
 	}
 
 	public void addEnrolment(CourseParticipant... cps) {
@@ -110,9 +124,9 @@ public class PublicSession extends Session {
 			for (int x=0; x< enrolments.size();x++) {
 				Person person = (Person) enrolments.get(x);
 				if (person.getCompany() == null) {
-					pw.printf("%-30d%s %S\n", x+1, person.getFirstName(), person.getLastName());
+					pw.printf("%02d%-30s%s %S\n", x+1, "", person.getFirstName(), person.getLastName());
 				} else {
-					pw.printf("%-15d%-15s%s %S\n", x+1, person.getCompany().getName(),
+					pw.printf("%02d%-15s%-15s%s %S\n", x+1, "", person.getCompany().getName(),
 							person.getFirstName(), person.getLastName());
 				}
 			}

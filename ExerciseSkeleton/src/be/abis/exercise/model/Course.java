@@ -3,7 +3,7 @@ package be.abis.exercise.model;
 
 public enum Course {
 	   JAVA_PROGRAMMING ("Java programming", 4, 375.0),
-	   JAVA_ADVANCED ("Java SE advanced programming", 3, 400.0),
+	   JAVA_ADVANCED ("Java SE advanced programming", 3, 45600.5),
 	   J2EE_WEBSPHERE ("J2EE: building enterprise Java with WebSphere", 3, 400.0),
 	   MAINFRAME_CASE ("Mainframe case study", 5, 350),
 	   UNIX_SHELL ("UNIX/Linux shell programming", 2, 375),

@@ -1,9 +1,11 @@
 package be.abis.exercise.test;
 
+import java.text.DateFormat;
 import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoPeriod;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
@@ -24,9 +26,10 @@ public class DateTimeTest {
 
         System.out.println("------------------------------------------");
 
+        Locale de = new Locale("de");
         LocalDate birthdate = LocalDate.of(1998,01,06);
         System.out.println("Which day of the week was I born? (" + birthdate.format(formatter) + ")");
-        System.out.println(birthdate.getDayOfWeek().toString().toLowerCase());
+        System.out.println(birthdate.getDayOfWeek().getDisplayName(TextStyle.FULL, de));
 
         System.out.println("------------------------------------------");
 
@@ -45,8 +48,14 @@ public class DateTimeTest {
 
         LocalDateTime dateTimeBE = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
         LocalDateTime dateTimeKA = LocalDateTime.now(ZoneId.of("Asia/Calcutta"));
-        Duration duration = Duration.between(dateTimeBE, dateTimeKA);
-        System.out.println(duration.toHoursPart() + " hours " + duration.toMinutesPart() + " minutes");
+        double durationInMinutes = Duration.between(dateTimeBE, dateTimeKA).toMinutes();
+        System.out.println(durationInMinutes);
+        double hours = Math.floor(durationInMinutes/60);
+        double min = durationInMinutes%60;
+        System.out.println(hours + " hours " + min + " minutes");
+
+
+        //System.out.println(duration.toHoursPart() + " hours " + duration.toMinutesPart() + " minutes");
 
     }
 
