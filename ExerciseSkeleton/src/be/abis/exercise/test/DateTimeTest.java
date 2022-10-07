@@ -41,10 +41,12 @@ public class DateTimeTest {
 
         System.out.println("------------------------------------------");
 
+        System.out.println("What is the time difference between Brussels and Calcutta?");
+
         LocalDateTime dateTimeBE = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
         LocalDateTime dateTimeKA = LocalDateTime.now(ZoneId.of("Asia/Calcutta"));
         Duration duration = Duration.between(dateTimeBE, dateTimeKA);
-        System.out.println(duration);
+        System.out.println(duration.toHoursPart() + " hours " + duration.toMinutesPart() + " minutes");
 
     }
 
