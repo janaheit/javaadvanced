@@ -66,16 +66,16 @@ public class StreamsTest {
 
         System.out.println("------------------------------------");
         System.out.println("Group persons by company");
-        Map<String, List<Person>> groupByCompany = persons.stream()
+        Map<Company, List<Person>> groupByCompany = persons.stream()
                 .filter(p -> p.getCompany() != null)
-                .collect(Collectors.groupingBy(p -> p.getCompany().getName()));
+                .collect(Collectors.groupingBy(p -> p.getCompany()));
         System.out.println(groupByCompany);
 
         System.out.println("------------------------------------");
         System.out.println("How many persons per company?");
-        Map<String, Long> countByCompany = persons.stream()
+        Map<Company, Long> countByCompany = persons.stream()
                 .filter(p -> p.getCompany() != null)
-                .collect(Collectors.groupingBy(p -> p.getCompany().getName(), Collectors.counting()));
+                .collect(Collectors.groupingBy(p -> p.getCompany(), Collectors.counting()));
         System.out.println(countByCompany);
 
         System.out.println("------------------------------------");

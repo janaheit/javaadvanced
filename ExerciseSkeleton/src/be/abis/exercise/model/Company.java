@@ -1,4 +1,7 @@
 package be.abis.exercise.model;
+
+import java.util.Objects;
+
 public class Company implements Comparable<Company>{
 	
 	private String name;
@@ -34,11 +37,24 @@ public class Company implements Comparable<Company>{
 
 	@Override
 	public String toString() {
-		return this.getName() +  ((address!=null)?" at: " + address.toString():"");
+		return this.getName();
 	}
 
 	@Override
 	public int compareTo(Company o) {
 		return this.getName().compareTo(o.getName());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Company company = (Company) o;
+		return name.equals(company.name) && Objects.equals(address, company.address);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, address);
 	}
 }
