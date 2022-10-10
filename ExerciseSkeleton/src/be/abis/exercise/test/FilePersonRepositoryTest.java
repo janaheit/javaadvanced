@@ -32,7 +32,7 @@ class FilePersonRepositoryTest {
 
         List<String> personLines;
         personLines = Files.readAllLines(Paths.get("/temp/javacourses/persons.txt"));
-        assertEquals(personLines.size(), 6);
+        assertEquals(personLines.size(), 9);
     }
 
     @Test

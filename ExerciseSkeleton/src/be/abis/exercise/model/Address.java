@@ -1,11 +1,15 @@
 package be.abis.exercise.model;
 
 import be.abis.exercise.exception.ZipCodeNotCorrectException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Address {
+	private Logger log = LogManager.getLogger("exceptionLogger");
 	
 	private String street;
 	private String nr;
@@ -35,13 +39,32 @@ public class Address {
 			String regexBE = "[1-9]\\d{3}";
 			Pattern p = Pattern.compile(regexBE);
 			Matcher m = p.matcher(zipCode);
-			if (!m.matches()) throw new ZipCodeNotCorrectException("Zip code is not correct for Belgium");
+			if (!m.matches()) {
+				log.error("Zip code not correct for Belgium.");
+				throw new ZipCodeNotCorrectException("Zip code is not correct for Belgium");
+			}
 		} else if (countryCode.equals("NL")){
 			String regexNL = "[1-9]\\d{3}\\s?[A-Z]{2}";
 			Pattern p = Pattern.compile(regexNL);
 			Matcher m = p.matcher(zipCode);
-			if (!m.matches()) throw new ZipCodeNotCorrectException("Zip code is not correct for the Netherlands");
+			if (!m.matches()) {
+				log.error("Zip code not correct for the Netherlands.");
+				throw new ZipCodeNotCorrectException("Zip code is not correct for the Netherlands");
+			}
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Address address = (Address) o;
+		return street.equals(address.street) && nr.equals(address.nr) && zipCode.equals(address.zipCode) && town.equals(address.town) && country.equals(address.country) && countryCode.equals(address.countryCode);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(street, nr, zipCode, town, country, countryCode);
 	}
 
 	// GETTERS AND SETTERS

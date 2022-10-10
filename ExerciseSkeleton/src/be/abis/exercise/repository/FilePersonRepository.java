@@ -4,6 +4,8 @@ import be.abis.exercise.exception.PersonNotFoundException;
 import be.abis.exercise.model.Address;
 import be.abis.exercise.model.Company;
 import be.abis.exercise.model.Person;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,9 +15,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 
 public class FilePersonRepository implements PersonRepository {
+	private Logger log = LogManager.getLogger("exceptionLogger");
 
 	private static FilePersonRepository filePersonRepository;
 
@@ -83,7 +86,10 @@ public class FilePersonRepository implements PersonRepository {
 		Person person = persons.stream()
 				.filter(p -> p.getPersonNumber()==id)
 				.findAny()
-				.orElseThrow(() -> new PersonNotFoundException("Person with number " + id + " was not found."));
+				.orElseThrow(() -> {
+					log.error("Person with number " + id + " was not found.");
+					return new PersonNotFoundException("Person with number " + id + " was not found.");
+				});
 
 		return person;
 	}
@@ -93,7 +99,10 @@ public class FilePersonRepository implements PersonRepository {
 		Person person = persons.stream()
 				.filter(p -> p.getEmail().equals(email) && p.getPassword().equals(password))
 				.findAny()
-				.orElseThrow(() -> new PersonNotFoundException("Email or password not correct for " + email));
+				.orElseThrow(() -> {
+					log.error("Person was not found.");
+					return new PersonNotFoundException("Email or password not correct for " + email);
+				});
 
 		return person;
 	}

@@ -1,11 +1,14 @@
 package be.abis.exercise.model;
 
 import be.abis.exercise.exception.InvoiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 
 
 public class CompanySession extends Session {
+	private Logger log = LogManager.getLogger();
 	private static final double MIN_INVOICE = 900;
 	private static final double MAX_INVOICE = 5000;
 	
@@ -53,10 +56,12 @@ public class CompanySession extends Session {
 		Course c = this.getCourse();
 		double total = c.getDailyPrice() * c.getDays() * getNumberOfPersons();
 		if (total > MAX_INVOICE) {
+			log.error("Invoice exceeds limit.");
 			throw new InvoiceException("Invoice exceeds limit");
 		}
 		if (total < MIN_INVOICE) {
-		    throw new InvoiceException("Invoice is too low.");
+			log.error("Invoice is too low.");
+			throw new InvoiceException("Invoice is too low.");
 		}
 		return total;
 	}

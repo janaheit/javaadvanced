@@ -50,11 +50,11 @@ public class Company implements Comparable<Company>{
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Company company = (Company) o;
-		return name.equals(company.name) && Objects.equals(address, company.address);
+		return name.equals(company.name) && Objects.equals(address,company.getAddress());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, address);
+		return Objects.hash(name);
 	}
 }

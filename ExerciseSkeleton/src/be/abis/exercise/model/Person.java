@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Person implements Instructor, CourseParticipant, Comparable<CourseParticipant> {
 
@@ -42,6 +44,67 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		this.email = email;
 		this.password = password;
 	}
+
+	public Boolean isValidEmail(String email){
+		String emailRegex = "\\w*@[a-z]+\\.[a-z][a-z]+";
+
+		Pattern pattern = Pattern.compile(emailRegex);
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+
+	@Override
+	public String toString() {
+		return this.firstName + " " + this.lastName;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Person person = (Person) o;
+		return personNumber == person.personNumber && firstName.equals(person.firstName)
+				&& lastName.equals(person.lastName) && Objects.equals(birthDate, person.birthDate);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(personNumber, firstName, lastName);
+	}
+
+	public void teach(Course course) {
+		System.out.println(this + " teaches " + course.getTitle());
+	}
+
+	@Override
+	public String getName() {
+		return firstName + " " + lastName;
+	}
+
+	public long calculateAge(){
+		LocalDate dateToday = LocalDate.now();
+
+		return ChronoUnit.YEARS.between(this.birthDate, dateToday);
+	}
+
+	public void attendCourse(Course course) {
+		System.out.println(this + " follows " + course.getTitle());
+	}
+
+	@Override
+	public int compareTo(CourseParticipant o) {
+		return this.lastName.compareTo(((Person)o).lastName);
+	}
+
+	public static class FirstNameComparator implements Comparator<CourseParticipant>{
+		@Override
+		public int compare(CourseParticipant o1, CourseParticipant o2) {
+			return ((Person)o1).getFirstName().compareToIgnoreCase(((Person)o2).getFirstName());
+		}
+
+	}
+
+	// GETTERS AND SETTERS
 
 	public int getPersonNumber() {
 		return personNumber;
@@ -103,55 +166,6 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		return counter;
 	}
 
-	@Override
-	public String toString() {
-		return this.firstName + " " + this.lastName;
-	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Person person = (Person) o;
-		return personNumber == person.personNumber && firstName.equals(person.firstName)
-				&& lastName.equals(person.lastName) && Objects.equals(birthDate, person.birthDate);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(personNumber, firstName, lastName);
-	}
-
-	public void teach(Course course) {
-		System.out.println(this + " teaches " + course.getTitle());
-	}
-
-	@Override
-	public String getName() {
-		return firstName + " " + lastName;
-	}
-
-	public long calculateAge(){
-		LocalDate dateToday = LocalDate.now();
-
-		return ChronoUnit.YEARS.between(this.birthDate, dateToday);
-	}
-
-	public void attendCourse(Course course) {
-		System.out.println(this + " follows " + course.getTitle());
-	}
-	
-	@Override
-	public int compareTo(CourseParticipant o) {
-		return this.lastName.compareTo(((Person)o).lastName);
-	}
-
-    public static class FirstNameComparator implements Comparator<CourseParticipant>{
-		@Override
-		public int compare(CourseParticipant o1, CourseParticipant o2) {
-			return ((Person)o1).getFirstName().compareToIgnoreCase(((Person)o2).getFirstName());
-		}
-    	 
-    }
     
 }

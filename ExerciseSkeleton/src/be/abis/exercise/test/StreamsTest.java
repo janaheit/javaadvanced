@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,7 +38,7 @@ public class StreamsTest {
         System.out.println("distinct companies");
         persons.stream()
                 .filter(person -> person.getCompany()!= null)
-                .map(person -> person.getCompany().getName())
+                .map(person -> person.getCompany())
                 .distinct()
                 .forEach(System.out::println);
 
@@ -106,5 +108,11 @@ public class StreamsTest {
             System.out.println(e.getMessage());
         }
 
+
+        String emailRegex = "\\S@[a-z]+\\.[a-z]{2,5}";
+
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher("l?k@gmail.com");
+        System.out.println(matcher.matches());
     }
 }
