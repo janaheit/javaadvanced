@@ -1,12 +1,11 @@
 package be.abis.exercise.repository;
 
+import be.abis.exercise.exception.PersonNotFoundException;
 import be.abis.exercise.model.Address;
 import be.abis.exercise.model.Company;
 import be.abis.exercise.model.Person;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -14,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class FilePersonRepository implements PersonRepository {
 
@@ -34,25 +34,9 @@ public class FilePersonRepository implements PersonRepository {
 			System.out.println(e.getMessage());
 		}
 
-		// creating Persons by hand for now
-		/*
-		Person p1 = new Person("Jana","Heitkemper", LocalDate.of(1998, 01, 06),
-				"janaheitkemper@gmail.com","pqsszord", new Company("Smals"));
-		Person p2 = new Person("Anna","Müller");
-		Person p3 = new Person("Merlin","Heitkemper");
-		Person p4 = new Person("Gina","Beden");
-		Person p5 = new Person("Maya","Weidenlebbert");
-		Person p6 = new Person("Ola","Herz");
-
-		persons.add(p1);
-		persons.add(p2);
-		persons.add(p3);
-		persons.add(p4);
-		persons.add(p5);
-		persons.add(p6);*/
 	}
 
-	private Person createPerson(String personLine){
+	public Person createPerson(String personLine){
 		String[] elements = personLine.split(";");
 
 		// parse mandatory fields
@@ -95,21 +79,32 @@ public class FilePersonRepository implements PersonRepository {
 	}
 
 	@Override
-	public List<Person> getPersons() {
-		return persons;
+	public Person findPersonByID(int id) throws PersonNotFoundException {
+		Person person = persons.stream()
+				.filter(p -> p.getPersonNumber()==id)
+				.findAny()
+				.orElseThrow(() -> new PersonNotFoundException("Person with number " + id + " was not found."));
+
+		return person;
 	}
 
-	public void setCompanies(ArrayList<Person> persons) {
-		this.persons = persons;
+	@Override
+	public Person findPerson(String email, String password) throws PersonNotFoundException {
+		Person person = persons.stream()
+				.filter(p -> p.getEmail().equals(email) && p.getPassword().equals(password))
+				.findAny()
+				.orElseThrow(() -> new PersonNotFoundException("Email or password not correct for " + email));
+
+		return person;
 	}
-	
+
 	@Override
 	public void printPersonsSortedToFile(String file){
 		Collections.sort(persons);
 		try (PrintWriter pw = new PrintWriter(file)){
-		    for (Person c: persons){
-		    	pw.println(c);
-		    }
+			for (Person c: persons){
+				pw.println(c);
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -129,7 +124,30 @@ public class FilePersonRepository implements PersonRepository {
 		}
 	}
 
-	private StringBuilder writePersonLine(Person p){
+	public void writeAllPersonsToFile(String file, List<Person> personList){
+		try (PrintWriter pw = new PrintWriter(file)){
+			for (Person p:personList){
+				StringBuilder pl = writePersonLine(p);
+				pw.println(pl);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void writeOnePersonToFile(String file, Person person){
+		try (PrintWriter pw = new PrintWriter(new FileWriter(file, true))){
+			StringBuilder pl = writePersonLine(person);
+			pw.println(pl);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public StringBuilder writePersonLine(Person p){
 		StringBuilder personLine = new StringBuilder();
 
 		// data that every person has
@@ -200,6 +218,17 @@ public class FilePersonRepository implements PersonRepository {
 		System.out.println(personLine);
 		return personLine;
 	}
+
+	@Override
+	public List<Person> getPersons() {
+		return persons;
+	}
+
+	public void setCompanies(ArrayList<Person> persons) {
+		this.persons = persons;
+	}
+	
+
 
 	public static FilePersonRepository getInstance() {
 		if (filePersonRepository == null) filePersonRepository= new FilePersonRepository();

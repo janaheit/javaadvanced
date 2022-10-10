@@ -1,5 +1,6 @@
 package be.abis.exercise.test;
 
+import be.abis.exercise.exception.PersonNotFoundException;
 import be.abis.exercise.model.Person;
 import be.abis.exercise.repository.FilePersonRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,4 +35,26 @@ class FilePersonRepositoryTest {
         assertEquals(personLines.size(), 6);
     }
 
+    @Test
+    public void findSandyByID() throws PersonNotFoundException {
+        Person sandy = filePersonRepository.findPersonByID(1);
+        assertEquals("Sandy", sandy.getFirstName());
+    }
+
+    @Test
+    public void findNonExistingByID() throws PersonNotFoundException {
+        assertThrows(PersonNotFoundException.class, () -> filePersonRepository.findPersonByID(10));
+    }
+
+    @Test
+    public void findSandyByEmail() throws PersonNotFoundException {
+        Person sandy = filePersonRepository.findPerson("sschillebeeckx@abis.be", "somepass1");
+        assertEquals("Sandy", sandy.getFirstName());
+    }
+
+
+    @Test
+    public void findNonExistingByEmail() throws PersonNotFoundException {
+        assertThrows(PersonNotFoundException.class, () -> filePersonRepository.findPerson("janaheitkemper@web.de", "pqsszord"));
+    }
 }

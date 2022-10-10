@@ -44,8 +44,8 @@ class PersonTest {
     }
 
     @Test
-    public void calculateJanasAge(){
-        Person jana = persons.get(0);
-        assertEquals(jana.calculateAge(), 24);
+    public void calculateSandysAge(){
+        Person sandy = persons.get(0);
+        assertEquals(44, sandy.calculateAge());
     }
 }
