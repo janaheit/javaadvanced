@@ -29,7 +29,7 @@ public class LoggingTest {
             System.out.println(e.getMessage());
         }
 
-        Person person = new Person("Jana", "Heitkemper", LocalDate.now());
+        Person person = new Person("Jana", "Heitkemper", LocalDate.now(), "@gmail", "1234");
 
 
 

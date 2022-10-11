@@ -1,5 +1,6 @@
 package be.abis.exercise.repository;
 
+import be.abis.exercise.exception.EmailNotCorrectException;
 import be.abis.exercise.exception.PersonNotFoundException;
 import be.abis.exercise.model.Address;
 import be.abis.exercise.model.Company;
@@ -60,7 +61,11 @@ public class FilePersonRepository implements PersonRepository {
 		p.setPersonNumber(Integer.parseInt(number));
 
 		if (!elements[4].equals("null")) {
-			p.setEmail(elements[4]);
+			try {
+				p.setEmail(elements[4]);
+			} catch (EmailNotCorrectException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
 		if (!elements[5].equals("null")) {

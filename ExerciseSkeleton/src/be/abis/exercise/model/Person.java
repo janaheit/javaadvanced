@@ -1,5 +1,6 @@
 package be.abis.exercise.model;
 
+import be.abis.exercise.exception.EmailNotCorrectException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 public class Person implements Instructor, CourseParticipant, Comparable<CourseParticipant> {
 
 	private Logger consoleLog = LogManager.getLogger("Console");
+	private Logger exceptionLogger = LogManager.getLogger("exceptionLogger");
 	private static int counter = 0;
 
 	private int personNumber;
@@ -35,20 +37,31 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		this(firstName, lastName, birthdate);
 		this.company = company;
 	}
+
+	public Person(String firstName, String lastName, LocalDate birthDate, String email,
+				  String password) {
+		this(firstName,lastName, birthDate);
+		this.password = password;
+		try {
+			setEmail(email);
+		} catch (EmailNotCorrectException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	
 	public Person(String firstName, String lastName, LocalDate birthDate, String email,
 			String password, Company company) {
 		this(firstName,lastName,birthDate, company);
-		this.email = email;
 		this.password = password;
+		try {
+			setEmail(email);
+		} catch (EmailNotCorrectException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
-	public Person(String firstName, String lastName, LocalDate birthDate, String email,
-			String password) {
-		this(firstName,lastName, birthDate);
-		this.email = email;
-		this.password = password;
-	}
+
 
 	public Boolean isValidEmail(String email){
 		String emailRegex = "\\w*@[a-z]+\\.[a-z][a-z]+";
@@ -147,8 +160,14 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(String email) throws EmailNotCorrectException {
+
+		if (isValidEmail(email)){
+			this.email = email;
+		} else {
+			exceptionLogger.error("Unvalid email address");
+			throw new EmailNotCorrectException("This email is not valid, please enter another one.");
+		}
 	}
 
 	public String getPassword() {
