@@ -64,7 +64,7 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 
 
 	public Boolean isValidEmail(String email){
-		String emailRegex = "\\w*@[a-z]+\\.[a-z][a-z]+";
+		String emailRegex = "\\w*[.?,;]*\\w*@[a-z]+\\.[a-z][a-z]+";
 
 		Pattern pattern = Pattern.compile(emailRegex);
 		Matcher matcher = pattern.matcher(email);

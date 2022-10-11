@@ -28,6 +28,10 @@ public class PublicSession extends Session {
 		return sessionNr;
 	}
 
+	public void setSessionNr(int sessionNr) {
+		this.sessionNr = sessionNr;
+	}
+
 	@Override
 	public Company getOrganizer() {
 		return ABIS;

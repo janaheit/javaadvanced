@@ -1,6 +1,8 @@
 package be.abis.exercise.model;
 
 
+import be.abis.exercise.exception.CourseNotFoundException;
+
 public enum Course {
 	   JAVA_PROGRAMMING ("Java programming", 4, 375.0),
 	   JAVA_ADVANCED ("Java SE advanced programming", 3, 45600.5),
@@ -18,6 +20,13 @@ public enum Course {
 		this.title = title;
 		this.days = days;
 		this.dailyPrice = dailyPrice;
+	}
+
+	public static Course getCourseByTitle(String name) throws CourseNotFoundException {
+		for (Course value : Course.values()) {
+			if (value.getTitle().equals(name)) return value;
+		}
+		throw new CourseNotFoundException("Course does not exist.");
 	}
 
 	public String getTitle() {

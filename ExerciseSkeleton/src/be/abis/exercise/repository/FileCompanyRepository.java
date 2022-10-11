@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import be.abis.exercise.exception.CompanyNotFoundException;
 import be.abis.exercise.model.Company;
 
 public class FileCompanyRepository implements CompanyRepository {
@@ -39,7 +40,15 @@ public class FileCompanyRepository implements CompanyRepository {
 	public void setCompanies(ArrayList<Company> companies) {
 		this.companies = companies;
 	}
-	
+
+	public Company findCompanyByName(String name) throws CompanyNotFoundException {
+		for (Company c: companies) {
+			if (c.getName().equals(name)) return c;
+		}
+
+		throw new CompanyNotFoundException("Company was not found.");
+	}
+
 	@Override
 	public void printCompaniesSortedToFile(String file){
 		Collections.sort(companies);

@@ -112,6 +112,24 @@ public class FilePersonRepository implements PersonRepository {
 		return person;
 	}
 
+	public Person findPersonByName(String name) throws PersonNotFoundException {
+		Person person = persons.stream()
+				.filter(p -> p.getFirstName().equals(name.split(" ")[0])
+						&& p.getLastName().equals(name.split(" ")[1]))
+				.findAny()
+				.orElseThrow(() -> {
+					log.error("Person was not found.");
+					return new PersonNotFoundException("Person with this name does not exist.");
+				});
+
+		return person;
+	}
+
+	@Override
+	public List<Person> getPersons() {
+		return this.persons;
+	}
+
 	@Override
 	public void printPersonsSortedToFile(String file){
 		Collections.sort(persons);
@@ -233,16 +251,9 @@ public class FilePersonRepository implements PersonRepository {
 		return personLine;
 	}
 
-	@Override
-	public List<Person> getPersons() {
-		return persons;
-	}
-
-	public void setCompanies(ArrayList<Person> persons) {
+	public void setPersons(ArrayList<Person> persons) {
 		this.persons = persons;
 	}
-	
-
 
 	public static FilePersonRepository getInstance() {
 		if (filePersonRepository == null) filePersonRepository= new FilePersonRepository();

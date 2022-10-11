@@ -3,7 +3,6 @@ package be.abis.exercise.test;
 import be.abis.exercise.exception.PersonNotFoundException;
 import be.abis.exercise.model.Person;
 import be.abis.exercise.repository.FilePersonRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
