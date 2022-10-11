@@ -1,5 +1,8 @@
 package be.abis.exercise.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
@@ -9,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class Person implements Instructor, CourseParticipant, Comparable<CourseParticipant> {
 
+	private Logger consoleLog = LogManager.getLogger("Console");
 	private static int counter = 0;
 
 	private int personNumber;
@@ -24,6 +28,7 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		this.lastName = lastName;
 		personNumber = ++counter;
 		this.birthDate = birthDate;
+		consoleLog.info("Person with first name "+ firstName + " created.");
 	}
 
 	public Person(String firstName, String lastName, LocalDate birthdate, Company company) {
