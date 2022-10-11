@@ -15,9 +15,11 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class FileSessionRepository implements SessionRepository {
@@ -40,7 +42,29 @@ public class FileSessionRepository implements SessionRepository {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}
+		// Add some "find" methods in the SessionRepository
+		//   (e.g. find all sessions in a certain month and year; on a specific location; for a specific instructor; ...).
+	}
 
+	public List<Session> findSessionsByMonthAndYear(int month, int year) {
+
+		return sessions.stream()
+				.filter(session -> (session.getDate().getMonthValue() == month) && (session.getDate().getYear() == year))
+				.collect(Collectors.toList());
+	}
+
+	public List<Session> findSessionsByLocation(Company company) {
+
+		return sessions.stream()
+				.filter(session -> session.getLocation().equals(company))
+				.collect(Collectors.toList());
+	}
+
+	public List<Session> findSessionsByInstructor(Instructor instructor) {
+
+		return sessions.stream()
+				.filter(session -> session.getInstructor().equals(instructor))
+				.collect(Collectors.toList());
 	}
 
 	public Session createSession(String sessionLine) {
