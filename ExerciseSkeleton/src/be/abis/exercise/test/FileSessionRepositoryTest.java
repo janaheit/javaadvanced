@@ -51,5 +51,12 @@ class FileSessionRepositoryTest {
         assertEquals(4, sessions.size());
     }
 
+    @Test
+    public void coursesInNonExistingLocationGivesListOfZero() throws CompanyNotFoundException {
+        Company company = FileCompanyRepository.getInstance().findCompanyByName("Abis");
+        List<Session> sessions = sessionRepository.findSessionsByLocation(company);
+        assertEquals(4, sessions.size());
+    }
+
 
 }

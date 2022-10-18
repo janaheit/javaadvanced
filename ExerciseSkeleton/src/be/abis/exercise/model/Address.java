@@ -35,6 +35,8 @@ public class Address {
 	// BUSINESS METHODS
 	public void checkZipCode() throws ZipCodeNotCorrectException {
 
+		if (zipCode == null) throw new ZipCodeNotCorrectException("Zip code is null.");
+
 		if (countryCode.equals("BE")){
 			String regexBE = "[1-9]\\d{3}";
 			Pattern p = Pattern.compile(regexBE);

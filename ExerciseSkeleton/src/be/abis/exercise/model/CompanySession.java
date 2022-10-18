@@ -25,7 +25,23 @@ public class CompanySession extends Session {
 			Instructor instructor, Company organizer, int numberOfPersons) {
 		this(course, date, location, instructor,organizer);
 		this.numberOfPersons=numberOfPersons;
-	}	
+	}
+
+
+	@Override
+	public double invoice() throws InvoiceException {
+		Course c = this.getCourse();
+		double total = c.getDailyPrice() * c.getDays() * getNumberOfPersons();
+		if (total > MAX_INVOICE) {
+			log.error("Invoice exceeds limit.");
+			throw new InvoiceException("Invoice exceeds limit");
+		}
+		if (total < MIN_INVOICE) {
+			log.error("Invoice is too low.");
+			throw new InvoiceException("Invoice is too low.");
+		}
+		return total;
+	}
 
 	@Override
 	public Company getOrganizer() {
@@ -51,20 +67,6 @@ public class CompanySession extends Session {
 		return text;
 	}
 
-	@Override
-	public double invoice() throws InvoiceException {
-		Course c = this.getCourse();
-		double total = c.getDailyPrice() * c.getDays() * getNumberOfPersons();
-		if (total > MAX_INVOICE) {
-			log.error("Invoice exceeds limit.");
-			throw new InvoiceException("Invoice exceeds limit");
-		}
-		if (total < MIN_INVOICE) {
-			log.error("Invoice is too low.");
-			throw new InvoiceException("Invoice is too low.");
-		}
-		return total;
-	}
 
 
 

@@ -37,6 +37,37 @@ class AddressTest {
     }
 
     @Test
+    void checkTooLongNLThrows() {
+        Address address = new Address("Kanaalstraat", "85", "8933 DJB",
+                "Leeuwarden", "Netherlands", "NL");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
+    void checkCorrectLenOnlyDigitsNLThrows() {
+        Address address = new Address("Kanaalstraat", "85", "8933 89",
+                "Leeuwarden", "Netherlands", "NL");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+    @Test
+    void checkNullNLThrows(){
+        Address address = new Address("Kanaalstraat", "85", null,
+                "Leeuwarden", "Netherlands", "NL");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
+    void checkEmptyStringNLThrows(){
+        Address address = new Address("Kanaalstraat", "85", "",
+                "Leeuwarden", "Netherlands", "NL");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
     void checkCorrectBE() {
         Address address = new Address("Rue de Bourgogne", "99", "1190",
                 "Brussels", "België", "BE");
@@ -44,19 +75,43 @@ class AddressTest {
         assertDoesNotThrow(address::checkZipCode);
     }
 
+    @Test
+    void checkWrongBETooManyDigits() {
+        Address address = new Address("Rue de Bourgogne", "99", "119056",
+                "Brussels", "België", "BE");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
 
     @Test
-    void checkWrongBEThrows() {
-        Address address = new Address("Kanaalstraat", "85", "8933 DB",
+    void checkWrongBEWithLettersThrows() {
+        Address address = new Address("Kanaalstraat", "85", "8933DB",
                 "Leeuwarden", "België", "BE");
 
         assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
     }
 
     @Test
-    void checkWrongBEWith0Throws() {
+    void checkWrongBEWithLeading0Throws() {
         Address address = new Address("Kanaalstraat", "85", "0933",
                 "Leeuwarden", "België", "BE");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
+    void checkNullBEThrows(){
+        Address address = new Address("Kanaalstraat", "85", null,
+                "Leeuwarden", "Netherlands", "BE");
+
+        assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
+    }
+
+    @Test
+    void checkTooShortBEThrows(){
+        Address address = new Address("Kanaalstraat", "85", "125",
+                "Leeuwarden", "Netherlands", "BE");
 
         assertThrows(ZipCodeNotCorrectException.class, address::checkZipCode);
     }

@@ -1,5 +1,6 @@
 package be.abis.exercise.model;
 
+import be.abis.exercise.exception.BirthDateNotCorrectException;
 import be.abis.exercise.exception.EmailNotCorrectException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,14 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		this.firstName = firstName;
 		this.lastName = lastName;
 		personNumber = ++counter;
-		this.birthDate = birthDate;
+
+		try {
+			calculateAge(birthDate);
+			this.birthDate = birthDate;
+		} catch (BirthDateNotCorrectException e) {
+			System.out.println(e.getMessage());
+		}
+
 		consoleLog.info("Person with first name "+ firstName + " created.");
 	}
 
@@ -58,13 +66,10 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		} catch (EmailNotCorrectException e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
 
-
-
 	public Boolean isValidEmail(String email){
-		String emailRegex = "\\w*[.?,;]*\\w*@[a-z]+\\.[a-z][a-z]+";
+		String emailRegex = "\\w+[.?,;]*\\w*@[a-z]+\\.[a-z][a-z]+";
 
 		Pattern pattern = Pattern.compile(emailRegex);
 		Matcher matcher = pattern.matcher(email);
@@ -99,10 +104,20 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 		return firstName + " " + lastName;
 	}
 
-	public long calculateAge(){
+	public long calculateAge() throws BirthDateNotCorrectException {
+		return calculateAge(this.birthDate);
+	}
+
+	public long calculateAge(LocalDate date) throws BirthDateNotCorrectException {
+		if (date ==null) throw new BirthDateNotCorrectException("BirthDate is null");
+
 		LocalDate dateToday = LocalDate.now();
 
-		return ChronoUnit.YEARS.between(this.birthDate, dateToday);
+		long years = ChronoUnit.YEARS.between(date, dateToday);
+
+		if (years < 0) throw new BirthDateNotCorrectException("This birthdate lies in the future.");
+		if (years > 125) throw new BirthDateNotCorrectException("This person is too old (>125)");
+		return years;
 	}
 
 	public void attendCourse(Course course) {
@@ -153,7 +168,12 @@ public class Person implements Instructor, CourseParticipant, Comparable<CourseP
 	}
 
 	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
+		try {
+			calculateAge(birthDate);
+			this.birthDate = birthDate;
+		} catch (BirthDateNotCorrectException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public String getEmail() {
